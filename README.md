@@ -2,6 +2,16 @@
 
 A first-person escape room game built in Unity 6. Currently a work in progress.
 
+## Screenshots
+
+| Title Screen | Layout |
+|---|---|
+| ![Title Screen](img/title_screen.png) | ![Layout](img/layout_screen.png) |
+
+| Gameplay | Inspect Mode |
+|---|---|
+| ![Gameplay](img/game_screen.png) | ![Inspect](img/inspect_screen.png) |
+
 ## Gameplay
 
 You are locked in a room and must find items, solve a combination padlock, and escape. 
