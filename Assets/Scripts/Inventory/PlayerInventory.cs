@@ -10,10 +10,13 @@ public class PlayerInventory : MonoBehaviour
     [Header("UI References")] 
     [SerializeField] private GameObject hotBarObject;
 
-    [Header("Player References")] 
+    [Header("Player References")]
     [SerializeField] private Transform playerCameraTransform;
     [SerializeField] private Transform playerHandTransform;
     [SerializeField] private PlayerInteraction playerInteraction;
+
+    [Header("Drop Zone")]
+    [SerializeField] private BoxCollider globalBox;
     
     [Header("Hotbar Input Actions")] 
     [SerializeField] private InputActionReference[] hotbarActions;
@@ -99,6 +102,15 @@ public class PlayerInventory : MonoBehaviour
         UpdateHotbarOpacity();
     }
 
+    private bool IsInsideGlobalBox(Vector3 worldPos)
+    {
+        var localPos = globalBox.transform.InverseTransformPoint(worldPos) - globalBox.center;
+        var extents = globalBox.size * 0.5f;
+        return Mathf.Abs(localPos.x) <= extents.x
+            && Mathf.Abs(localPos.y) <= extents.y
+            && Mathf.Abs(localPos.z) <= extents.z;
+    }
+
     private void HandleDropItem()
     {
         var equippedSlot = _hotbarSlots[_selectedHotbarIndex];
@@ -110,11 +122,11 @@ public class PlayerInventory : MonoBehaviour
 
         if (prefab == null) return;
 
-        var dropped = Instantiate(
-            prefab,
-            playerCameraTransform.position + playerCameraTransform.forward,
-            Quaternion.identity
-        );
+        var dropPosition = playerCameraTransform.position + playerCameraTransform.forward;
+
+        if (globalBox != null && !IsInsideGlobalBox(dropPosition)) return;
+
+        var dropped = Instantiate(prefab, dropPosition, Quaternion.identity);
 
         var item = dropped.GetComponent<Item>();
         if (item == null) item = dropped.AddComponent<Item>();

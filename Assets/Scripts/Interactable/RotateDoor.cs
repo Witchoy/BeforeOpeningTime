@@ -20,6 +20,7 @@ public class RotateDoor : MonoBehaviour
     {
         if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         _currentCoroutine = StartCoroutine(ToggleDoor());
+        if (TryGetComponent(out PlaySFX sfx)) sfx.Play();
     }
 
     private IEnumerator ToggleDoor()
